@@ -1,0 +1,373 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📝 博客编辑器</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vditor@3.10.7/dist/index.css">
+<style>
+:root {
+  --teal: #0D9488; --teal-dark: #0F766E;
+  --sidebar-bg: #0F172A; --sidebar-hover: #1E293B; --sidebar-active: #0D9488;
+  --surface: #FFFFFF; --surface-secondary: #F8FAFC;
+  --border: #E2E8F0; --text: #1E293B; --text-secondary: #64748B; --text-muted: #94A3B8;
+  --danger: #EF4444; --radius-sm: 6px; --radius: 10px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.05);
+  --shadow: 0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.04);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,.06),0 2px 4px -2px rgba(0,0,0,.04);
+  --transition: 180ms cubic-bezier(.4,0,.2,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC",sans-serif;background:#F1F5F9;height:100vh;overflow:hidden;-webkit-font-smoothing:antialiased}
+#app{display:flex;height:100vh}
+
+/* Sidebar */
+#sidebar{width:240px;background:var(--sidebar-bg);color:#E2E8F0;display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;transition:width var(--transition)}
+#sidebar .header{padding:18px 16px 14px;border-bottom:1px solid rgba(255,255,255,.06)}
+#sidebar .header h3{font-size:13px;font-weight:600;color:#94A3B8;letter-spacing:.5px;text-transform:uppercase}
+#post-list{flex:1;overflow-y:auto;padding:6px 8px}
+#post-list::-webkit-scrollbar{width:4px}
+#post-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:2px}
+#post-list .item{padding:10px 12px;border-radius:var(--radius-sm);cursor:pointer;font-size:13px;margin-bottom:1px;transition:all var(--transition)}
+#post-list .item:hover{background:var(--sidebar-hover)}
+#post-list .item.active{background:var(--sidebar-active);color:#fff}
+#post-list .item.active .meta{color:rgba(255,255,255,.6)}
+#post-list .item .title{font-weight:500;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#post-list .item .meta{font-size:11px;color:#64748B;margin-top:3px}
+#sidebar .btn-new{margin:8px 10px 10px;padding:10px;background:var(--teal);color:#fff;border:none;border-radius:var(--radius);cursor:pointer;font-size:13px;font-weight:600;transition:all var(--transition)}
+#sidebar .btn-new:hover{background:var(--teal-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(13,148,136,.3)}
+
+/* Main */
+#main{flex:1;display:flex;flex-direction:column;min-width:0}
+
+/* Toolbar */
+#toolbar{display:flex;align-items:center;gap:12px;padding:12px 20px;background:var(--surface);border-bottom:1px solid var(--border);flex-wrap:wrap;box-shadow:var(--shadow-sm)}
+#toolbar label{font-size:12px;font-weight:600;color:var(--text-secondary);white-space:nowrap;letter-spacing:.3px}
+#toolbar input[type=text]{padding:7px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;outline:none;transition:all var(--transition);background:var(--surface-secondary);color:var(--text)}
+#toolbar input[type=text]:hover{border-color:#CBD5E1}
+#toolbar input[type=text]:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(13,148,136,.12);background:var(--surface)}
+#toolbar #post-title{width:220px;font-weight:500}
+#toolbar .filename{width:180px;font-family:"SF Mono","Fira Code",monospace;font-size:12px !important}
+#toolbar .tags-input{width:160px}
+#toolbar .cats-input{width:110px}
+#toolbar .spacer{flex:1}
+#toolbar button{padding:7px 16px;border:none;border-radius:var(--radius-sm);cursor:pointer;font-size:13px;font-weight:500;transition:all var(--transition);white-space:nowrap;display:inline-flex;align-items:center;gap:5px}
+#toolbar .btn-save{background:var(--teal);color:#fff}
+#toolbar .btn-save:hover{background:var(--teal-dark);box-shadow:0 2px 8px rgba(13,148,136,.25);transform:translateY(-1px)}
+#toolbar .btn-delete{background:transparent;color:var(--text-secondary);border:1px solid var(--border)}
+#toolbar .btn-delete:hover{color:var(--danger);border-color:var(--danger);background:#FEF2F2}
+
+/* Editor + Preview */
+#editor-area{flex:1;display:flex;overflow:hidden;background:var(--surface)}
+#vditor-wrap{width:55%;overflow:hidden;background:var(--surface);flex-shrink:0}
+#preview-panel{width:45%;min-width:200px;background:var(--surface);display:flex;flex-direction:column;flex-shrink:0}
+#preview-panel .preview-bar{display:flex;justify-content:space-between;align-items:center;padding:7px 14px;background:var(--surface-secondary);border-bottom:1px solid var(--border);font-size:12px;color:var(--text-secondary);flex-shrink:0}
+#preview-frame{flex:1;width:100%;border:none;background:#fff}
+
+/* Tooltips */
+.vditor-toolbar__item[data-type]:hover::after {
+  content: attr(data-type); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+  background: var(--sidebar-bg); color: #fff; padding: 5px 10px;
+  border-radius: var(--radius-sm); font-size: 12px; white-space: nowrap;
+  z-index: 1000; margin-bottom: 6px; pointer-events: none; box-shadow: var(--shadow-md);
+}
+.vditor-toolbar__item[data-type]:hover::before {
+  content: ""; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+  border: 5px solid transparent; border-top-color: var(--sidebar-bg); margin-bottom: 1px; pointer-events: none;
+}
+
+/* Toast */
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:var(--sidebar-bg);color:#fff;padding:10px 24px;border-radius:var(--radius);font-size:13px;z-index:9999;box-shadow:var(--shadow-md);animation:toastIn .25s ease}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.toast.out{opacity:0;transform:translateX(-50%) translateY(-6px);transition:all .25s ease} #sidebar.collapsed{width:50px}#sidebar.collapsed .header h3,#sidebar.collapsed #post-list,#sidebar.collapsed .btn-new{display:none}#sidebar.collapsed .header{justify-content:center !important;padding:18px 0 14px}
+
+/* Vditor editor typography - smoother writing experience */
+.vditor-wysiwyg { padding: 28px 32px !important; font-size: 15px; line-height: 1.85; color: #374151; font-family: -apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC',sans-serif; -webkit-font-smoothing: antialiased; }
+.vditor-wysiwyg h1,.vditor-wysiwyg h2,.vditor-wysiwyg h3,.vditor-wysiwyg h4,.vditor-wysiwyg h5,.vditor-wysiwyg h6 { margin: 1.2em 0 .5em; font-weight: 600; color: #111827; }
+.vditor-wysiwyg h1 { font-size: 1.8em; } .vditor-wysiwyg h2 { font-size: 1.5em; } .vditor-wysiwyg h3 { font-size: 1.25em; }
+.vditor-wysiwyg p { margin: .7em 0; }
+.vditor-wysiwyg ul,.vditor-wysiwyg ol { padding-left: 1.6em; }
+.vditor-wysiwyg li { margin: .25em 0; }
+.vditor-wysiwyg blockquote { margin: .8em 0; padding: .4em 1em; border-left: 3px solid #d1d5db; color: #6b7280; }
+.vditor-wysiwyg code { background: #f3f4f6; padding: 2px 6px; border-radius: 4px; font-size: .9em; color: #e11d48; }
+.vditor-wysiwyg pre { background: #f3f4f6; border-radius: 6px; padding: 16px !important; }
+.vditor-wysiwyg pre code { background: transparent; padding: 0; color: #374151; }
+.vditor-wysiwyg table { border-collapse: collapse; }
+.vditor-wysiwyg th,.vditor-wysiwyg td { border: 1px solid #e5e7eb; padding: 6px 10px; }
+.vditor-wysiwyg hr { border: none; border-top: 1px solid #e5e7eb; margin: 1.2em 0; }
+.vditor-wysiwyg a { color: #2563eb; }
+.vditor-wysiwyg img { max-width: 100%; border-radius: 4px; }
+.vditor-wysiwyg:focus { outline: none; }
+
+@media(max-width:900px){#vditor-wrap{width:50%}#sidebar{width:200px}}
+</style>
+</head>
+<body>
+<div id="app">
+<div id="sidebar">
+  <div class="header" style="display:flex;justify-content:space-between;align-items:center"><h3>文章列表</h3><button onclick="toggleSidebar()" style="background:none;border:none;color:#94A3B8;cursor:pointer;font-size:16px;padding:2px 6px;border-radius:4px;transition:all var(--transition)" title="折叠侧栏">☰</button></div>
+  <button class="btn-new" onclick="newPost()">+ 新建文章</button>
+  <div id="post-list"></div>
+</div>
+<div id="main">
+  <div id="toolbar">
+    <label>标题</label>
+    <input type="text" id="post-title" placeholder="文章标题...">
+    <label>文件</label>
+    <input type="text" id="post-filename" class="filename" placeholder="article.md">
+    <label>标签</label>
+    <input type="text" id="post-tags" class="tags-input" placeholder="标签1, 标签2">
+    <label>分类</label>
+    <input type="text" id="post-cats" class="cats-input" placeholder="技术">
+    <span class="spacer"></span>
+    <button class="btn-delete" onclick="deletePost()">删除</button>
+    <button class="btn-save" onclick="savePost()">保存</button>
+  </div>
+  <div id="editor-area"><div id="vditor-wrap"></div><div id="split-handle" style="width:6px;cursor:col-resize;background:transparent;transition:background .15s;flex-shrink:0;position:relative;z-index:10" onmousedown="startResize(event)" onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='transparent'"></div><div id="preview-panel">
+      <div class="preview-bar">
+        <span>📄 预览</span>
+        <button onclick="refreshPreview()" style="background:var(--teal);color:#fff;border:none;padding:3px 12px;border-radius:4px;cursor:pointer;font-size:12px">🔄 刷新预览</button>
+      </div>
+      <iframe id="preview-frame"></iframe>
+    </div>
+  </div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vditor@3.10.7/dist/index.min.js"></script>
+<script>
+var API = "http://localhost:3030/api";
+var HEXO = "http://localhost:4000";
+var vditor = null;
+var currentFile = null;
+var previewTimer = null;
+
+async function fetchJSON(url, opts) {
+  var res = await fetch(url, opts);
+  return res.json();
+}
+
+async function loadPostList() {
+  var posts = await fetchJSON(API + "/posts");
+  var list = document.getElementById("post-list");
+  list.innerHTML = posts.map(function(p) {
+    return '<div class="item" data-file="' + p.file + '"><div class="title">' + p.title + '</div><div class="meta">' + (p.date||"").substring(0,10) + '</div></div>';
+  }).join("");
+  list.onclick = function(e) {
+    var item = e.target.closest(".item");
+    if (item) openPost(item.getAttribute("data-file"));
+  };
+}
+
+async function openPost(file) {
+  currentFile = file;
+  document.querySelectorAll("#post-list .item").forEach(function(el) { el.classList.remove("active"); });
+  var el = document.querySelector('[data-file="' + file + '"]');
+  if (el) el.classList.add("active");
+
+  var post = await fetchJSON(API + "/post?file=" + encodeURIComponent(file));
+  document.getElementById("post-title").value = post.title || "";
+  document.getElementById("post-filename").value = post.file || "";
+  document.getElementById("post-tags").value = (post.tags||[]).join(", ");
+  document.getElementById("post-cats").value = (post.categories||[]).join(", ");
+  initVditor(post.content || "");
+  renderPreview(post.content || "");
+}
+
+function initVditor(content) {
+  var wrap = document.getElementById("vditor-wrap");
+  wrap.innerHTML = "";
+  if (vditor) vditor.destroy();
+  vditor = new Vditor("vditor-wrap", {
+    mode: "wysiwyg",
+    height: wrap.clientHeight,
+    value: content,
+    placeholder: "开始写作...",
+    toolbar: [
+      "headings","bold","italic","strike","|",
+      "line","quote","list","ordered-list","code","inline-code","|",
+      "link","table","|",
+      "undo","redo","|",
+      "fullscreen",
+    ],
+    toolbarConfig: { hide: false, pin: true },
+    preview: {
+      markdown: {
+        codeBlockPreview: false
+      }
+    },
+    cache: { enable: false },
+    after: function() {
+      setTimeout(function() {
+        var labels = {
+          "headings":"标题","bold":"加粗","italic":"斜体","strike":"删除线",
+          "line":"分隔线","quote":"引用","list":"无序列表","ordered-list":"有序列表",
+          "code":"代码块","inline-code":"行内代码","link":"链接","table":"表格",
+          "undo":"撤销","redo":"重做","fullscreen":"全屏"
+        };
+        document.querySelectorAll(".vditor-toolbar__item[data-type]").forEach(function(el) {
+          var type = el.getAttribute("data-type");
+          if (!el.hasAttribute("title") && labels[type]) {
+            el.setAttribute("title", labels[type]);
+            el.setAttribute("data-type", labels[type]);
+          }
+        });
+      }, 100);
+    },
+  });
+}
+
+function refreshPreview() { if (vditor) renderPreview(vditor.getValue()); }
+
+function renderPreview(content) {
+  if (!content) content = "";
+  var frame = document.getElementById("preview-frame");
+  var rendered = typeof marked !== "undefined" ? marked.parse(content) : content;
+  var doc = '<!DOCTYPE html><html><head><meta charset="UTF-8">' +
+    '<link rel="stylesheet" href="' + HEXO + '/css/var.css">' +
+    '<link rel="stylesheet" href="' + HEXO + '/css/index.css">' +
+    '<style>' +
+    'body{background:#fff !important;margin:0;padding:0}' +
+    'header,#header,nav,#nav,.page-top-card,#footer,footer,#rightside,#aside-content,' +
+    '#post-comment,#comments,.post-edit-link,#toc,.prev-next-posts,.related-posts,' +
+    '.post-copyright,.post-reward,.layout.hide-aside,#toggle-sidebar,' +
+    '#body-wrap>header,#body-wrap>nav,.layout>div:first-child:not(#post),' +
+    '#aside-content,#rightside,#mobile-toc-button{display:none !important}' +
+    '.layout{display:flex;justify-content:center;padding:0 !important;margin:0 !important}' +
+    '#post,#article-container,#content-inner{max-width:100% !important;width:100% !important;padding:24px 28px !important;margin:0 !important}' +
+    '.post-bg{display:none !important}' +
+    'img{max-width:100%}' +
+    /* Code block styles matching Butterfly */
+    'pre{position:relative;overflow-x:auto;padding:30px 20px 20px !important;margin:20px 0;' +
+    'background:#282c34 !important;border-radius:8px;color:#abb2bf;font-size:14px;line-height:1.6;' +
+    'font-family:SF Mono,Fira Code,Consolas,monospace}' +
+    'pre code{background:transparent !important;padding:0 !important;color:inherit;font-size:inherit;font-family:inherit}' +
+    'pre::before{content:"";position:absolute;top:12px;left:16px;width:12px;height:12px;border-radius:50%;' +
+    'background:#ff5f56;box-shadow:20px 0 0 #ffbd2e,40px 0 0 #27c93f}' +
+    'pre[class*="language-"]::after{position:absolute;top:6px;right:14px;font-size:11px;color:#5c6370;text-transform:uppercase}' +
+    '.hljs-keyword,.hljs-type{color:#c678dd}.hljs-string{color:#98c379}' +
+    '.hljs-comment{color:#5c6370;font-style:italic}.hljs-number{color:#d19a66}' +
+    '.hljs-function{color:#61afef}.hljs-attr{color:#e5c07b}' +
+    'figure.highlight{margin:20px 0}figure.highlight table{width:100%}' +
+    'figure.highlight .gutter{display:none}figure.highlight pre{padding:30px 20px 20px !important;margin:0}' +
+    '@media screen and (max-width:768px){#post,#article-container{padding:14px !important}}' +
+    '</style></head><body><div id="post"><div id="article-container">' +
+    rendered + '</div></div></body></html>';
+  frame.srcdoc = doc;
+}
+
+
+
+async function savePost() {
+  var file = document.getElementById("post-filename").value.trim();
+  if (!file) return showToast("请输入文件名");
+  if (!vditor) return showToast("请先选择文章");
+  var content = vditor.getValue();
+  await fetchJSON(API + "/post", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      file: file,
+      title: document.getElementById("post-title").value.trim(),
+      tags: document.getElementById("post-tags").value.split(",").map(function(t){return t.trim()}).filter(Boolean),
+      categories: document.getElementById("post-cats").value.split(",").map(function(c){return c.trim()}).filter(Boolean),
+      content: content,
+    }),
+  });
+  currentFile = file;
+  await loadPostList();
+  setTimeout(function() {
+    var el = document.querySelector('[data-file="' + file + '"]');
+    if (el) el.classList.add("active");
+  }, 300);
+  showToast("已保存");
+}
+
+async function deletePost() {
+  if (!currentFile) return;
+  if (!confirm("确定删除 " + currentFile + "？")) return;
+  await fetchJSON(API + "/post", {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ file: currentFile }),
+  });
+  currentFile = null;
+  ["post-title","post-filename","post-tags","post-cats"].forEach(function(id){document.getElementById(id).value="";});
+  if (vditor) vditor.destroy();
+  document.getElementById("vditor-wrap").innerHTML = "";
+  document.getElementById("preview-frame").srcdoc = "";
+  loadPostList();
+  showToast("已删除");
+}
+
+function newPost() {
+  var ts = new Date().toISOString().replace("T","-").substring(0,16).replace(/:/g,"-");
+  var file = ts + ".md";
+  document.getElementById("post-filename").value = file;
+  ["post-title","post-tags","post-cats"].forEach(function(id){document.getElementById(id).value="";});
+  currentFile = file;
+  document.querySelectorAll("#post-list .item").forEach(function(el){el.classList.remove("active")});
+  initVditor("");
+  renderPreview("");
+}
+
+function showToast(msg) {
+  var existing = document.querySelector(".toast");
+  if (existing) existing.remove();
+  var t = document.createElement("div");
+  t.className = "toast"; t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(function() { t.classList.add("out"); setTimeout(function() { t.remove(); }, 250); }, 1800);
+}
+
+async function handleEditParam() {
+  var params = new URLSearchParams(window.location.search);
+  var editFile = params.get("edit");
+  if (editFile) { await loadPostList(); openPost(editFile); window.history.replaceState({}, "", "/"); }
+}
+
+// Sidebar toggle
+function toggleSidebar() {
+  document.getElementById("sidebar").classList.toggle("collapsed");
+  // Recalculate Vditor height after transition
+  setTimeout(function() {
+    if (vditor) vditor.resize();
+  }, 200);
+}
+
+// Resizable split pane
+var isResizing = false;
+function startResize(e) {
+  isResizing = true;
+  document.body.style.cursor = "col-resize";
+  document.body.style.userSelect = "none";
+  document.addEventListener("mousemove", doResize);
+  document.addEventListener("mouseup", stopResize);
+  e.preventDefault();
+}
+function doResize(e) {
+  if (!isResizing) return;
+  var area = document.getElementById("editor-area");
+  var rect = area.getBoundingClientRect();
+  var handle = document.getElementById("split-handle");
+  var handleW = handle.offsetWidth;
+  var editorW = e.clientX - rect.left;
+  var totalW = rect.width - handleW;
+  var pct = Math.max(25, Math.min(80, (editorW / totalW) * 100));
+  document.getElementById("vditor-wrap").style.width = pct + "%";
+  document.getElementById("preview-panel").style.width = (100 - pct) + "%";
+  if (vditor) vditor.resize();
+}
+function stopResize() {
+  isResizing = false;
+  document.body.style.cursor = "";
+  document.body.style.userSelect = "";
+  document.removeEventListener("mousemove", doResize);
+  document.removeEventListener("mouseup", stopResize);
+}
+
+loadPostList().then(handleEditParam);
+</script>
+</body>
+</html>
