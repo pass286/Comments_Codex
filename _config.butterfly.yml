@@ -243,17 +243,25 @@ related_post:
 # false: disable pagination
 post_pagination: 1
 
+
+# Reading Progress Bar
+reading_progress:
+  enable: true
+  color: "#0D9488"
+  height: 2px
+  position: top
+
 # Displays outdated notice for a post
 noticeOutdate:
-  enable: false
+  enable: true
   # Style: simple / flat
   style: flat
   # When will it be shown
   limit_day: 365
   # Position: top / bottom
   position: top
-  message_prev: It has been
-  message_next: days since the last update, the content of the article may be outdated.
+  message_prev: 本文最后更新于
+  message_next: 天前，内容可能已过时。
 
 # --------------------------------------
 # Footer Settings
@@ -432,7 +440,7 @@ copy:
 
 # Need to install the hexo-wordcount plugin
 wordcount:
-  enable: false
+  enable: true
   # Display the word count of the article in post meta
   post_wordcount: true
   # Display the time to read the article in post meta

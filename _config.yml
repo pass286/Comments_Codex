@@ -13,7 +13,8 @@ timezone: ''
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: http://example.com
+url: https://pass286.github.io/Comments_Codex
+root: /Comments_Codex/
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
@@ -98,13 +99,29 @@ ignore:
 ## Themes: https://hexo.io/themes/
 theme: butterfly
 
-# Deployment
-## Docs: https://hexo.io/docs/one-command-deployment
-deploy:
-  type: ''
 # Local Search
 search:
   path: search.xml
   field: post
   content: true
   format: html
+# Server
+server:
+  port: 4000
+  log: true
+  compress: true
+# RSS Feed
+feed:
+  type: atom
+  path: atom.xml
+  limit: 20
+
+# Sitemap
+sitemap:
+  path: sitemap.xml
+
+# Deployment
+deploy:
+  type: git
+  repo: https://github.com/pass286/Comments_Codex.git
+  branch: gh-pages
