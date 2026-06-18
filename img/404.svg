@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200">
+  <rect width="400" height="200" fill="#f1f5f9" rx="8"/>
+  <text x="200" y="90" text-anchor="middle" font-size="48" font-family="Arial,sans-serif" fill="#cbd5e1">🖼</text>
+  <text x="200" y="140" text-anchor="middle" font-size="16" font-family="Arial,sans-serif" fill="#94a3b8">图片加载失败</text>
+</svg>

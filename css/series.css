@@ -1,0 +1,698 @@
+/* ============================================
+   Series Page ? Override page container
+   Make the page background transparent so each
+   card stands alone with its own glass surface.
+   ============================================ */
+.type-series #page,
+.type-series_detail #page {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+.type-series #article-container,
+.type-series_detail #article-container {
+  background: transparent !important;
+}
+
+/* ============================================
+   Series Index ? Container
+   ============================================ */
+.series-index {
+  max-width: 780px;
+  margin: 0 auto;
+}
+.series-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ============================================
+   Series Strip Card ? Bento + Glass
+   Each card is an independent glass surface
+   with elevation shadow and accent detail.
+   ============================================ */
+.series-strip-card {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 28px 32px;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 20px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    0 4px 12px rgba(0, 0, 0, 0.06);
+}
+/* Left accent stripe */
+.series-strip-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 20%;
+  bottom: 20%;
+  width: 5px;
+  background: linear-gradient(180deg, #0D9488, #2DD4BF);
+  border-radius: 0 3px 3px 0;
+  opacity: 0;
+  transform: scaleY(0.6);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.series-strip-card:hover {
+  background: rgba(255, 255, 255, 0.88);
+  transform: translateY(-3px);
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.06),
+    0 8px 24px rgba(0, 0, 0, 0.1);
+  border-color: rgba(13, 148, 136, 0.2);
+}
+.series-strip-card:hover::before {
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+/* ---------- Index Number ---------- */
+.strip-index {
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 1.5em;
+  font-weight: 300;
+  color: #cbd5e1;
+  min-width: 44px;
+  text-align: center;
+  flex-shrink: 0;
+  transition: color 0.3s, transform 0.3s;
+}
+.series-strip-card:hover .strip-index {
+  color: #0D9488;
+  transform: scale(1.1);
+}
+
+/* ---------- Body ---------- */
+.strip-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 24px;
+}
+.strip-name {
+  font-size: 1.2em;
+  font-weight: 700;
+  color: #1e293b;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+}
+.strip-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.strip-post-title {
+  font-size: 0.82em;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left: 14px;
+  position: relative;
+}
+.strip-post-title::before {
+  content: '\2014';
+  position: absolute;
+  left: 0;
+  color: #94a3b8;
+  font-size: 0.85em;
+}
+
+/* ---------- Count Badge ---------- */
+.strip-count {
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 1.05em;
+  font-weight: 600;
+  color: #0D9488;
+  background: rgba(13, 148, 136, 0.08);
+  padding: 8px 16px;
+  border-radius: 24px;
+  min-width: 40px;
+  text-align: center;
+  flex-shrink: 0;
+  transition: background 0.3s, color 0.3s;
+}
+.series-strip-card:hover .strip-count {
+  background: #0D9488;
+  color: #fff;
+}
+
+/* ---------- Arrow ---------- */
+.strip-arrow {
+  font-size: 1.3em;
+  color: #94a3b8;
+  transition: all 0.3s;
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+.series-strip-card:hover .strip-arrow {
+  color: #0D9488;
+  transform: translateX(6px);
+}
+
+/* ============================================
+   Pagination ? independent floating bar
+   ============================================ */
+.series-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 36px;
+  padding: 16px 24px;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 16px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+.page-btn,
+.page-num {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 0.9em;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  font-weight: 500;
+}
+.page-btn:hover,
+.page-num:hover {
+  background: rgba(13, 148, 136, 0.08);
+  color: #0D9488;
+}
+.page-num.active {
+  background: #0D9488;
+  color: #fff;
+  border-color: #0D9488;
+}
+.page-nums {
+  display: flex;
+  gap: 4px;
+}
+
+/* ============================================
+   Series Detail Page Header
+   ============================================ */
+.series-detail-header {
+  text-align: center;
+  margin-bottom: 36px;
+  padding: 32px 24px;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+}
+.series-detail-header h2 {
+  font-size: 1.7em;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 6px;
+  letter-spacing: 0.03em;
+}
+.series-detail-count {
+  font-size: 0.88em;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* ============================================
+   Series Nav (post prev/next inside article)
+   ============================================ */
+.series-nav {
+  margin: 30px 0 20px;
+  padding: 20px 24px;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 16px;
+}
+.series-nav-label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  color: #1e293b;
+}
+.series-nav-label a {
+  color: #0D9488;
+  text-decoration: none;
+}
+.series-nav-label a:hover {
+  text-decoration: underline;
+}
+.series-nav-links {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.series-nav-prev,
+.series-nav-next {
+  flex: 1;
+  padding: 10px 16px;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 10px;
+  font-size: 13px;
+  color: #1e293b;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.series-nav-prev:hover,
+.series-nav-next:hover {
+  background: #0D9488;
+  color: #fff;
+}
+.series-nav-disabled {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  color: #94a3b8;
+}
+.series-nav-next {
+  text-align: right;
+}
+
+
+/* ============================================
+   Categories Index ? Bento Cards
+   ============================================ */
+
+/* Override page container (same as series) */
+.type-categories_page #page {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+.type-categories_page #article-container {
+  background: transparent !important;
+}
+.type-categories_page #article-container {
+  background: transparent !important;
+}
+
+/* ============================================
+   Categories Index - Horizontal Split Cards
+   ============================================ */
+
+/* Remove default list styling */
+.category-list {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.category-list::before,
+.category-list-item::before,
+.category-list-item::marker {
+  display: none !important;
+  content: none !important;
+}
+.category-list-item {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* ============================================
+   Category Card
+   ============================================ */
+.category-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 3px 7px -1px rgba(0,0,0,.1);
+  text-decoration: none;
+  color: inherit;
+  line-height: 1.4;
+  transition: box-shadow 0.3s;
+}
+.category-card:hover {
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+}
+.category-card a {
+  color: inherit;
+  text-decoration: none;
+}
+.category-card a:hover {
+  color: #0D9488;
+}
+
+/* ---------- Meta (cover image area) ---------- */
+.category-card .meta {
+  position: relative;
+  z-index: 0;
+  height: 200px;
+  overflow: hidden;
+}
+.category-card .photo {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.35s ease;
+}
+.category-card:hover .photo {
+  transform: scale(1.15) rotate(2deg);
+}
+
+/* ---------- Details overlay ---------- */
+.category-card .details,
+.category-card .details ul {
+  margin: auto;
+  padding: 0;
+  list-style: none;
+}
+.category-card .details {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -100%;
+  margin: auto;
+  transition: left 0.3s ease;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  color: #fff;
+  padding: 20px 24px;
+  width: 100%;
+  font-size: 0.9em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+.category-card:hover .details {
+  left: 0;
+}
+.category-card .details li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  text-shadow: 0 1px 3px rgba(0,0,0,.4);
+}
+.category-card .details li i {
+  width: 20px;
+  text-align: center;
+  opacity: 0.8;
+}
+.category-card .details .latest {
+  font-size: 0.85em;
+  opacity: 0.85;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------- Description (text area) ---------- */
+.category-card .description {
+  padding: 20px 24px;
+  background: #fff;
+  position: relative;
+  z-index: 1;
+}
+.category-card .description h2 {
+  line-height: 1;
+  margin: 0;
+  font-size: 1.5em;
+  color: #1e293b;
+  font-weight: 700;
+}
+.category-card .description h3 {
+  font-size: 0.88em;
+  font-weight: 400;
+  color: #94a3b8;
+  margin: 4px 0 12px;
+}
+.cat-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 14px;
+}
+.cat-preview-line {
+  margin: 0 !important;
+  font-size: 0.85em;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left: 14px;
+  position: relative;
+}
+.cat-preview-line::before {
+  content: "\2014";
+  position: absolute;
+  left: 0;
+  color: #94a3b8;
+  font-size: 0.85em;
+}
+.cat-preview-line:first-of-type::before {
+  display: none;
+}
+
+/* Description first paragraph top bar */
+.category-card .description p:first-of-type {
+  margin-top: 1.25rem;
+}
+.category-card .description p:first-of-type::before {
+  content: "";
+  position: absolute;
+  height: 4px;
+  background: #0D9488;
+  width: 30px;
+  top: -0.65rem;
+  border-radius: 2px;
+}
+
+/* ---------- Read More ---------- */
+.category-card .read-more {
+  text-align: right;
+  margin: 4px 0 0 !important;
+}
+.category-card .read-more span {
+  color: #0D9488;
+  display: inline-block;
+  position: relative;
+  font-weight: 600;
+  font-size: 0.9em;
+  cursor: pointer;
+}
+.category-card .read-more span::after {
+  content: "\f061";
+  font-family: "Font Awesome 6 Free", "Font Awesome 7 Free";
+  font-weight: 900;
+  margin-left: -10px;
+  opacity: 0;
+  vertical-align: middle;
+  transition: margin 0.3s, opacity 0.3s;
+}
+.category-card:hover .read-more span::after {
+  margin-left: 6px;
+  opacity: 1;
+}
+
+/* ---------- Alternate layout (image right) ---------- */
+.category-card.alt {
+  /* mobile: same as default, desktop: reverse */
+}
+
+/* ---------- Desktop (640px+) ---------- */
+@media (min-width: 640px) {
+  .category-card {
+    flex-direction: row;
+    max-width: 780px;
+  }
+  .category-card .meta {
+    flex: 0 0 40%;
+    height: auto;
+    min-height: 220px;
+  }
+  .category-card .description {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .category-card .description::before {
+    transform: skewX(-3deg);
+    content: "";
+    background: #fff;
+    width: 30px;
+    position: absolute;
+    left: -10px;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+  }
+
+  /* Alt: image on right */
+  .category-card.alt {
+    flex-direction: row-reverse;
+  }
+  .category-card.alt .description::before {
+    left: auto;
+    right: -10px;
+    transform: skewX(3deg);
+  }
+  .category-card.alt .details {
+    left: auto;
+    right: -100%;
+    transition: right 0.3s ease;
+  }
+  .category-card.alt:hover .details {
+    right: 0;
+    left: auto;
+  }
+}
+
+/* Hide recommend strip on category detail pages */
+#page .recommend-strip {
+  display: none;
+}
+
+/* ============================================
+   Dark Mode - Categories
+   ============================================ */
+[data-theme="dark"] .category-card {
+  background: #1a1f2e;
+  box-shadow: 0 3px 7px -1px rgba(0,0,0,.4);
+}
+[data-theme="dark"] .category-card:hover {
+  box-shadow: 0 6px 20px rgba(0,0,0,.5);
+}
+[data-theme="dark"] .category-card .description {
+  background: #1a1f2e;
+}
+[data-theme="dark"] .category-card .description::before {
+  background: #1a1f2e;
+}
+[data-theme="dark"] .category-card .description h2 {
+  color: #e5e7eb;
+}
+[data-theme="dark"] .category-card .description h3 {
+  color: #6b7280;
+}
+[data-theme="dark"] .cat-preview-line {
+  color: #9ca3af;
+}
+[data-theme="dark"] .cat-preview-line::before {
+  color: #4b5563;
+}
+
+
+/* ============================================
+   Dark Mode
+   ============================================ */
+[data-theme="dark"] .series-strip-card {
+  background: rgba(30, 35, 45, 0.65);
+  border-color: rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.3);
+}
+[data-theme="dark"] .series-strip-card:hover {
+  background: rgba(40, 48, 58, 0.85);
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.3),
+    0 8px 24px rgba(0, 0, 0, 0.5);
+  border-color: rgba(13, 148, 136, 0.15);
+}
+[data-theme="dark"] .strip-index { color: #4b5563; }
+[data-theme="dark"] .series-strip-card:hover .strip-index { color: #0D9488; }
+[data-theme="dark"] .strip-name { color: #e5e7eb; }
+[data-theme="dark"] .strip-post-title { color: #9ca3af; }
+[data-theme="dark"] .strip-post-title::before { color: #4b5563; }
+[data-theme="dark"] .strip-count { background: rgba(13, 148, 136, 0.12); }
+[data-theme="dark"] .strip-arrow { color: #4b5563; }
+[data-theme="dark"] .series-strip-card:hover .strip-arrow { color: #0D9488; }
+
+[data-theme="dark"] .series-pagination {
+  background: rgba(30, 35, 45, 0.55);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+[data-theme="dark"] .page-btn,
+[data-theme="dark"] .page-num {
+  color: #9ca3af;
+}
+[data-theme="dark"] .page-btn:hover,
+[data-theme="dark"] .page-num:hover {
+  background: rgba(13, 148, 136, 0.12);
+  color: #34D399;
+}
+[data-theme="dark"] .page-num.active {
+  background: #0D9488;
+  color: #fff;
+}
+
+[data-theme="dark"] .series-detail-header {
+  background: rgba(30, 35, 45, 0.55);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+[data-theme="dark"] .series-detail-header h2 { color: #e5e7eb; }
+[data-theme="dark"] .series-detail-count { color: #9ca3af; }
+
+[data-theme="dark"] .series-nav {
+  background: rgba(30, 35, 45, 0.55);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+[data-theme="dark"] .series-nav-prev,
+[data-theme="dark"] .series-nav-next {
+  background: rgba(255, 255, 255, 0.04);
+  color: #e5e7eb;
+}
+[data-theme="dark"] .series-nav-label { color: #e5e7eb; }
+[data-theme="dark"] .series-nav-disabled { color: #6b7280; }
+
+/* ============================================
+   Reduced Motion
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .series-strip-card,
+  .series-strip-card::before,
+  .strip-index,
+  .strip-count,
+  .strip-arrow {
+    transition: none !important;
+  }
+  .series-strip-card:hover {
+    transform: none;
+  }
+}

@@ -1,0 +1,636 @@
+/* ============================================
+   Global Background + Frosted Glass
+   ============================================ */
+body {
+  background: url(https://picsum.photos/1920/1080?random=blog) fixed center / cover !important;
+}
+#page-header.full_page {
+  background: transparent !important;
+}
+#page-header #nav {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Remove blue mask on all headers */
+#page-header.not-home-page,
+#page-header.post-bg {
+  background-color: transparent !important;
+}
+#page-header.not-home-page::before,
+#page-header.post-bg::before,
+#page-header.full_page::before {
+  display: none !important;
+}
+
+/* Post / Page / Archive frosted glass */
+#post, #page, #archive {
+  background: rgba(255, 255, 255, 0.72) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  padding: 24px;
+}
+.article-sort-item {
+  background: rgba(255, 255, 255, 0.55) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 8px;
+  margin-bottom: 6px;
+  padding: 8px 12px;
+}
+
+/* Dark mode: other pages */
+[data-theme="dark"] #post,
+[data-theme="dark"] #page,
+[data-theme="dark"] #archive {
+  background: rgba(30, 30, 30, 0.75) !important;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+[data-theme="dark"] .article-sort-item {
+  background: rgba(30, 30, 30, 0.55) !important;
+}
+
+/* ============================================
+   Grid layout: 3 cards per row (adaptive)
+   ============================================ */
+#recent-posts .recent-post-items {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: center;
+  gap: 20px;
+}
+@media screen and (max-width: 900px) {
+  #recent-posts .recent-post-items {
+    grid-template-columns: repeat(2, 1fr);
+    justify-content: center;
+  }
+}
+@media screen and (max-width: 640px) {
+  #recent-posts .recent-post-items {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+}
+
+/* ============================================
+   Recommend Carousel
+   ============================================ */
+
+.recommend-carousel {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  margin-bottom: 36px;
+  border-radius: 16px;
+  background: #0F172A;
+}
+
+/* Track */
+.carousel-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+
+/* Slide */
+.carousel-slide {
+  min-width: 100%;
+  height: 100%;
+  position: relative;
+}
+.carousel-slide a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Cover image */
+.carousel-img {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  transition: transform 6s ease;
+}
+.carousel-slide.active .carousel-img {
+  transform: scale(1.05);
+}
+
+/* Gradient overlay */
+.carousel-slide a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(15, 23, 42, 0.85) 0%,
+    rgba(15, 23, 42, 0.3) 40%,
+    rgba(15, 23, 42, 0.05) 70%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* Caption */
+.carousel-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 32px 40px;
+  z-index: 2;
+  pointer-events: none;
+}
+.carousel-label {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #0D9488;
+  background: rgba(13, 148, 136, 0.15);
+  padding: 3px 10px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+.carousel-caption h3 {
+  margin: 0 0 6px 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.3;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+.carousel-date {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* Navigation buttons */
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  opacity: 0;
+}
+.recommend-carousel:hover .carousel-btn {
+  opacity: 1;
+}
+.carousel-btn:hover {
+  background: rgba(13, 148, 136, 0.6);
+  border-color: #0D9488;
+  transform: translateY(-50%) scale(1.1);
+}
+.carousel-btn svg {
+  width: 20px;
+  height: 20px;
+}
+.carousel-btn.prev {
+  left: 16px;
+}
+.carousel-btn.next {
+  right: 16px;
+}
+
+/* Dots */
+.carousel-dots {
+  position: absolute;
+  bottom: 20px;
+  right: 40px;
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.carousel-dot.active {
+  background: #0D9488;
+  box-shadow: 0 0 8px rgba(13, 148, 136, 0.5);
+  width: 24px;
+  border-radius: 4px;
+}
+
+/* Progress bar */
+.carousel-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  z-index: 10;
+}
+.carousel-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: #0D9488;
+  box-shadow: 0 0 6px rgba(13, 148, 136, 0.6);
+}
+
+/* ============================================
+   Responsive - Carousel
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .recommend-carousel {
+    height: 280px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+  }
+  .carousel-caption {
+    padding: 20px 24px;
+  }
+  .carousel-caption h3 {
+    font-size: 18px;
+  }
+  .carousel-btn {
+    width: 34px;
+    height: 34px;
+    opacity: 1;
+  }
+  .carousel-btn.prev {
+    left: 8px;
+  }
+  .carousel-btn.next {
+    right: 8px;
+  }
+  .carousel-dots {
+    right: 24px;
+    bottom: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel-track {
+    transition: none;
+  }
+  .carousel-slide.active .carousel-img {
+    transform: none;
+  }
+}/* ============================================
+   Responsive
+   ============================================ */
+@media screen and (max-width: 768px) {
+  .recommend-strip {
+    height: 280px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+  }
+  .slider-arrow {
+    width: 34px;
+    height: 34px;
+  }
+  .slider-nav .main-nav.prev {
+    left: 8px;
+  }
+  .slider-nav .main-nav.next {
+    right: 8px;
+  }
+}
+
+/* ============================================
+   Card UI — adapted from reference design
+   ============================================ */
+
+#recent-posts .recent-post-item {
+  background: #f5f5f5;
+  padding: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
+  position: relative;
+  height: auto !important;
+  margin-bottom: 0 !important;
+  display: flex;
+  flex-direction: column;
+}
+#recent-posts .recent-post-item:hover {
+  background: #ffffff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+}
+
+/* ── Wrapper ── */
+#recent-posts .recent-post-item .wrapper {
+  height: fit-content;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* ── Cover image (card-image) ── */
+#recent-posts .recent-post-item .post_cover {
+  width: 100% !important;
+  height: 230px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: height 0.3s ease;
+}
+#recent-posts .recent-post-item:hover .post_cover {
+  height: 150px;
+}
+#recent-posts .recent-post-item .post_cover .post-bg {
+  z-index: 0 !important;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+#recent-posts .recent-post-item:hover .post-bg {
+  transform: scale(1.08);
+}
+
+/* ── Content area ── */
+#recent-posts .recent-post-item .content {
+  width: 100%;
+  padding: 10px 15px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  flex: 1;
+}
+
+/* Title */
+#recent-posts .recent-post-item .article-title {
+  font-size: 0.85em;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #333;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+#recent-posts .recent-post-item .article-title a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+#recent-posts .recent-post-item .article-title a:hover {
+  color: #49b1f5;
+}
+
+/* Date */
+#recent-posts .recent-post-item .article-date {
+  font-size: 0.78em;
+  font-weight: 500;
+  color: #666;
+  margin: 0;
+}
+
+/* Category text */
+#recent-posts .recent-post-item .article-category {
+  font-size: 0.7em;
+  font-weight: 500;
+  color: #adadad;
+  margin: 0;
+}
+
+/* — Read More button: hidden below, slides up on hover — */
+#recent-posts .recent-post-item .card-btn {
+  position: absolute;
+  bottom: 0;
+  left: 15px;
+  right: 15px;
+  height: 36px;
+  background-color: rgb(24, 24, 24);
+  border: none;
+  border-radius: 40px;
+  color: white;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.82em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transform: translateY(100%);
+  opacity: 0;
+  z-index: 3;
+}
+#recent-posts .recent-post-item:hover .card-btn {
+  transform: translateY(-12px);
+  opacity: 1;
+}
+#recent-posts .recent-post-item .card-btn:hover {
+  background-color: greenyellow;
+  color: rgb(35, 35, 35);
+}
+
+/* ── Tag badge (top-left corner) ── */
+#recent-posts .recent-post-item .tag {
+  position: absolute;
+  background-color: greenyellow;
+  color: rgb(0, 0, 0);
+  left: 12px;
+  top: 12px;
+  padding: 4px 10px;
+  border-radius: 15px;
+  font-size: 0.72em;
+  font-weight: 600;
+  z-index: 5;
+}
+
+/* ── Sidebar widgets: frosted glass ── */
+#aside-content .card-widget {
+  background: rgba(255, 255, 255, 0.72) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Pagination */
+#pagination { backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+#pagination .page-number {
+  background: rgba(255, 255, 255, 0.72) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* ============================================
+   Dark mode
+   ============================================ */
+[data-theme="dark"] #recent-posts .recent-post-item {
+  background: rgba(40, 40, 40, 0.85);
+}
+[data-theme="dark"] #recent-posts .recent-post-item:hover {
+  background: rgba(50, 50, 50, 0.9);
+}
+[data-theme="dark"] #recent-posts .recent-post-item .article-title {
+  color: #e0e0e0;
+}
+[data-theme="dark"] #recent-posts .recent-post-item .article-date {
+  color: #aaa;
+}
+[data-theme="dark"] #recent-posts .recent-post-item .article-category {
+  color: #888;
+}
+[data-theme="dark"] #recent-posts .recent-post-item .card-btn {
+  background-color: #e0e0e0;
+  color: #1a1a1a;
+}
+[data-theme="dark"] #recent-posts .recent-post-item .card-btn:hover {
+  background-color: greenyellow;
+  color: #1a1a1a;
+}
+[data-theme="dark"] #aside-content .card-widget {
+  background: rgba(30, 30, 30, 0.75) !important;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+[data-theme="dark"] #pagination .page-number {
+  background: rgba(30, 30, 30, 0.75) !important;
+}
+[data-theme="dark"] #page-header #nav {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* ============================================
+   Footer — Glassmorphism + Teal Top Line
+   ============================================ */
+
+#footer {
+  position: relative;
+  background: rgba(255, 255, 255, 0.6) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: none !important;
+  transition: background 0.35s ease;
+}
+
+/* Teal gradient top line */
+#footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 5%, #0D9488 30%, #14B8A6 50%, #0D9488 70%, transparent 95%);
+  z-index: 1;
+}
+
+/* Inner content positioning */
+#footer > * {
+  position: relative;
+}
+
+/* Text styling */
+#footer,
+#footer .footer-copyright,
+#footer .copyright,
+#footer .framework-info,
+#footer .footer_custom_text {
+  color: #666 !important;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  font-weight: 400;
+}
+
+/* Links */
+#footer a {
+  color: #0D9488 !important;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.25s ease;
+}
+#footer a:hover {
+  color: #0F766E !important;
+  opacity: 0.85;
+}
+
+/* Separator */
+#footer .footer-separator {
+  color: #ccc !important;
+  margin: 0 6px;
+}
+
+/* Footer-other spacing */
+#footer .footer-other {
+  padding: 24px 20px;
+}
+
+
+/* ============================================
+   Footer — Dark Mode
+   ============================================ */
+
+[data-theme="dark"] #footer {
+  background: rgba(20, 20, 20, 0.7) !important;
+}
+
+[data-theme="dark"] #footer,
+[data-theme="dark"] #footer .footer-copyright,
+[data-theme="dark"] #footer .copyright,
+[data-theme="dark"] #footer .framework-info,
+[data-theme="dark"] #footer .footer_custom_text {
+  color: #bbb !important;
+}
+
+[data-theme="dark"] #footer a {
+  color: #14B8A6 !important;
+}
+[data-theme="dark"] #footer a:hover {
+  color: #2DD4BF !important;
+}
+
+[data-theme="dark"] #footer .footer-separator {
+  color: #555 !important;
+}
+
+
+/* ============================================
+   Footer — Responsive
+   ============================================ */
+
+@media screen and (max-width: 768px) {
+  #footer .footer-other {
+    padding: 18px 14px;
+  }
+  #footer,
+  #footer .footer-copyright,
+  #footer .copyright,
+  #footer .framework-info,
+  #footer .footer_custom_text {
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #footer,
+  #footer a {
+    transition: none;
+  }
+}
