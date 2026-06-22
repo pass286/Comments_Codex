@@ -2,7 +2,7 @@
    Global Background + Frosted Glass
    ============================================ */
 body {
-  background: url(https://picsum.photos/1920/1080?random=blog) fixed center / cover !important;
+  background: var(--img-api) fixed center / cover !important;
 }
 #page-header.full_page {
   background: transparent !important;
@@ -118,10 +118,12 @@ body {
   background-size: cover;
   background-position: center;
   transition: transform 6s ease;
-}
+
+  background-color: #1e293b; /* fallback when bg-image fails */}
 .carousel-slide.active .carousel-img {
   transform: scale(1.05);
-}
+
+  background-color: #1e293b; /* fallback when bg-image fails */}
 
 /* Gradient overlay */
 .carousel-slide a::after {
@@ -291,7 +293,8 @@ body {
   }
   .carousel-slide.active .carousel-img {
     transform: none;
-  }
+  
+  background-color: #1e293b; /* fallback when bg-image fails */}
 }/* ============================================
    Responsive
    ============================================ */
@@ -314,7 +317,7 @@ body {
 }
 
 /* ============================================
-   Card UI — adapted from reference design
+   Card UI �� adapted from reference design
    ============================================ */
 
 #recent-posts .recent-post-item {
@@ -335,7 +338,7 @@ body {
   transform: translateY(-3px);
 }
 
-/* ── Wrapper ── */
+/* ���� Wrapper ���� */
 #recent-posts .recent-post-item .wrapper {
   height: fit-content;
   width: 100%;
@@ -345,7 +348,7 @@ body {
   justify-content: flex-start;
 }
 
-/* ── Cover image (card-image) ── */
+/* ���� Cover image (card-image) ���� */
 #recent-posts .recent-post-item .post_cover {
   width: 100% !important;
   height: 230px;
@@ -358,6 +361,7 @@ body {
   height: 150px;
 }
 #recent-posts .recent-post-item .post_cover .post-bg {
+  background: linear-gradient(135deg, #e2e8f0, #cbd5e1); /* fallback when img fails */
   z-index: 0 !important;
   position: absolute;
   inset: 0;
@@ -370,7 +374,7 @@ body {
   transform: scale(1.08);
 }
 
-/* ── Content area ── */
+/* ���� Content area ���� */
 #recent-posts .recent-post-item .content {
   width: 100%;
   padding: 10px 15px 4px;
@@ -418,7 +422,7 @@ body {
   margin: 0;
 }
 
-/* — Read More button: hidden below, slides up on hover — */
+/* �� Read More button: hidden below, slides up on hover �� */
 #recent-posts .recent-post-item .card-btn {
   position: absolute;
   bottom: 0;
@@ -450,7 +454,7 @@ body {
   color: rgb(35, 35, 35);
 }
 
-/* ── Tag badge (top-left corner) ── */
+/* ���� Tag badge (top-left corner) ���� */
 #recent-posts .recent-post-item .tag {
   position: absolute;
   background-color: greenyellow;
@@ -464,7 +468,7 @@ body {
   z-index: 5;
 }
 
-/* ── Sidebar widgets: frosted glass ── */
+/* ���� Sidebar widgets: frosted glass ���� */
 #aside-content .card-widget {
   background: rgba(255, 255, 255, 0.72) !important;
   backdrop-filter: blur(14px);
@@ -518,7 +522,7 @@ body {
 }
 
 /* ============================================
-   Footer — Glassmorphism + Teal Top Line
+   Footer �� Glassmorphism + Teal Top Line
    ============================================ */
 
 #footer {
@@ -584,7 +588,7 @@ body {
 
 
 /* ============================================
-   Footer — Dark Mode
+   Footer �� Dark Mode
    ============================================ */
 
 [data-theme="dark"] #footer {
@@ -612,7 +616,7 @@ body {
 
 
 /* ============================================
-   Footer — Responsive
+   Footer �� Responsive
    ============================================ */
 
 @media screen and (max-width: 768px) {
